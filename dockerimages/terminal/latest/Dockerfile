@@ -11,7 +11,8 @@ ENV HOME /root
 ARG kubeVersion=1.25.6
 ARG ttydVersion=1.7.3
 ARG helmVersion=3.12.0
-ARG ARCH
+ARG TARGETARCH
+ARG ARCH=${TARGETARCH}
 ARG DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /root
@@ -24,7 +25,7 @@ RUN arch                                                                        
     apt-get update                                                                                                              && \
     apt-get install -y --no-install-recommends -o Acquire::http::No-Cache=True                                                     \
     ca-certificates curl wget bind9-utils git g++ gcc libc6-dev make pkg-config vim                                                \
-    ncurses-dev libtolua-dev exuberant-ctags gdb dnsutils iputils-ping net-tools postgresql-client                              && \
+    ncurses-dev libtolua-dev exuberant-ctags gdb dnsutils iputils-ping net-tools postgresql-client openssh-client               && \
     apt-get clean && rm -rf /var/lib/apt/lists/*                                                                                && \
     chmod a+x /usr/bin/ttyd-kubectl.sh                                                                                          && \
     bash /usr/bin/ttyd-kubectl.sh                                                                                               && \
@@ -39,6 +40,8 @@ ENV USER_TOKEN ""
 ENV APISERVER "https://apiserver.cluster.local:6443"
 ENV USER_NAME "admin"
 ENV NAMESPACE "default"
+ENV AUTH_HEADER ""
+ENV CREDENTIAL ""
 
 EXPOSE 8080
 
